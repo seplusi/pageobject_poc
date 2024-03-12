@@ -1,25 +1,18 @@
 import pytest
-import time
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
+from main.config.config_class import ConfigInitClass
 
+@pytest.fixture(scope="function", name="init_config_object")
+def init_config_object_create():
+    return ConfigInitClass()
 
 @pytest.fixture(scope="function", name="webdriver")
-def webdriver_create():
-    options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
-    # Instanciate webdriver
-    driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
-    yield driver
+def webdriver_create(init_config_object):
+    yield init_config_object.driver
+    
     # Destroying webdriver"
-    driver.stop_client()
-    driver.close()
+    init_config_object.driver.stop_client()
+    init_config_object.driver.close()
 
-@pytest.fixture
-def order():
-    return []
-
-@pytest.fixture
-def top(order, innermost):
-    order.append("top")
+@pytest.fixture(scope="function", name="config")
+def config_fixture(init_config_object):
+    return init_config_object.config

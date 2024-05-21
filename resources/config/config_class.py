@@ -8,7 +8,7 @@ class ConfigInitClass(object):
     def __init__(self) -> None:
         # Load 
         self.config = ConfigParser()
-        self.config.read('main/config/config.ini')
+        self.config.read('resources/config/config.ini')
         add_args_lst = self.config.get('webdriver', 'options').split('|')
         options = webdriver.ChromeOptions()
         for argument in add_args_lst:

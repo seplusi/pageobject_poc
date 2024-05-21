@@ -1,5 +1,5 @@
 import pytest
-from main.config.config_class import ConfigInitClass
+from resources.config.config_class import ConfigInitClass
 
 @pytest.fixture(scope="function", name="init_config_object")
 def init_config_object_create():

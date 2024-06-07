@@ -6,6 +6,15 @@ class commonClass(object):
     def __init__(self, driver, config) -> None:
         self.driver = driver
         self.config = config
+        self.section = __class__.__name__.lower()
+
+    def get_all_locators(self, section_name):
+        locators = {}
+        for key in self.config[section_name]:
+            type, selector = self.config[section_name][key].split(', ')
+            locators[key.upper()] = (eval(f'By.{type}'), selector)
+        
+        return locators
     
     def wait_4_element_visible(self, locator, timeout=10):
         initial_ts = int(time.time())

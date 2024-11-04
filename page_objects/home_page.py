@@ -10,8 +10,7 @@ import re
 
 class convertHomePage(commonClass):
     def __init__(self, driver, config, url, accept_cookies=True) -> None:
-        super().__init__(driver, config)
-        self.locators = self.get_all_locators(__class__.__name__)
+        super().__init__(driver, config, __class__.__name__)
         self.driver.get(url)
         if accept_cookies:
             cookies(self.driver, config).accept()

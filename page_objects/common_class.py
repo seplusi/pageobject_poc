@@ -3,12 +3,14 @@ from selenium.webdriver.common.by import By
 
 
 class commonClass(object):
-    def __init__(self, driver, config) -> None:
+    def __init__(self, driver, config, page_obj_class_name) -> None:
         self.driver = driver
         self.config = config
-        self.section = __class__.__name__.lower()
+        # Load page specific locators 
+        self.config.read(f'resources/locator/{page_obj_class_name}.ini')
+        self.locators = self._get_all_locators(page_obj_class_name)
 
-    def get_all_locators(self, section_name):
+    def _get_all_locators(self, section_name):
         locators = {}
         for key in self.config[section_name]:
             type, selector = self.config[section_name][key].split(', ')

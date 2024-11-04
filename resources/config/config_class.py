@@ -1,5 +1,7 @@
+import json
 from configparser import ConfigParser
 from selenium import webdriver
+from appium import webdriver as appiumdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -10,9 +12,17 @@ class ConfigInitClass(object):
         self.config = ConfigParser()
         self.config.read('resources/config/config.ini')
         add_args_lst = self.config.get('webdriver', 'options').split('|')
-        options = webdriver.ChromeOptions()
+        self.options = webdriver.ChromeOptions()
         for argument in add_args_lst:
-            options.add_argument(argument)
+            self.options.add_argument(argument)
+
+    def webdriver(self):
         # Instanciate webdriver
-        self.driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
-        
+        self.driver = webdriver.Chrome(options=self.options, service=ChromeService(ChromeDriverManager().install()))
+    
+    def appiumdriver(self):
+        # Instanciate appiumdriver
+        appium_capabilities = self.config.get('appiumdriver', 'capabilities')
+        appium_server_url = self.config.get('appiumdriver', 'appium_server_url')
+        self.appiumdriver = appiumdriver.Remote(appium_server_url, desired_capabilities=json.loads(appium_capabilities))
+        print("fghjk")

@@ -7,6 +7,7 @@ def init_config_object_create():
 
 @pytest.fixture(scope="function", name="webdriver")
 def webdriver_create(init_config_object):
+    init_config_object.webdriver()
     yield init_config_object.driver
     
     # Destroying webdriver"
@@ -16,3 +17,8 @@ def webdriver_create(init_config_object):
 @pytest.fixture(scope="function", name="config")
 def config_fixture(init_config_object):
     return init_config_object.config
+
+@pytest.fixture(scope="function", name="appiumdriver")
+def appiumdriver_create(init_config_object):
+    yield init_config_object.appiumdriver
+    

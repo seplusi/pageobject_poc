@@ -6,8 +6,7 @@ from page_objects.common_class import commonClass
 
 class cookies(commonClass):
     def __init__(self, driver, config) -> None:
-        super().__init__(driver, config)
-        self.locators = self.get_all_locators(__class__.__name__)
+        super().__init__(driver, config, __class__.__name__)
         self.accept_btn = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(self.locators['ACCEPT_BUTTON']))
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable(self.locators['CUSTOMIZE_BUTTON']))
     

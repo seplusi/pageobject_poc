@@ -17,5 +17,6 @@ def test_convert_real2euros(webdriver, config):
     home_page.conversion_result(100, 'Euros')
 
 #def test_mobile_home_page(appiumdriver):
+#    appiumdriver.get(URL)
 #    print("fghjk")
 #    pass

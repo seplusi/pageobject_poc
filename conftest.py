@@ -20,5 +20,8 @@ def config_fixture(init_config_object):
 
 @pytest.fixture(scope="function", name="appiumdriver")
 def appiumdriver_create(init_config_object):
+    init_config_object.appiumdriver()
     yield init_config_object.appiumdriver
+
+    init_config_object.appiumdriver.quit()
     

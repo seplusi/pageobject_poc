@@ -16,7 +16,7 @@ def test_convert_real2euros(webdriver, config):
     assert home_page.conversion_1st_line() == f'100.00 Brazilian Reais ='
     home_page.conversion_result(100, 'Euros')
 
-#def test_mobile_home_page(appiumdriver):
-#    appiumdriver.get(URL)
-#    print("fghjk")
-#    pass
+def test_mobile_home_page(appiumdriver):
+    appiumdriver.get(URL)
+    print("fghjk")
+    pass

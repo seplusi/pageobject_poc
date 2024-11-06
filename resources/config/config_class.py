@@ -24,6 +24,7 @@ class ConfigInitClass(object):
     def appiumdriver(self):
         options = UiAutomator2Options()
         # Instanciate appiumdriver
-        appium_capabilities = self.config.get('appiumdriver', 'capabilities')
+        appium_capabilities = json.loads(self.config.get('appiumdriver', 'capabilities'))
+        options.load_capabilities(appium_capabilities)
         appium_server_url = self.config.get('appiumdriver', 'appium_server_url')
-        self.appiumdriver = appiumdriver.Remote(appium_server_url, desired_capabilities=json.loads(appium_capabilities))
+        self.appiumdriver = appiumdriver.Remote(appium_server_url, options=options)

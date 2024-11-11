@@ -1,6 +1,5 @@
 from page_objects.common_class import commonClass
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 class mobileConvertHomePage(commonClass):

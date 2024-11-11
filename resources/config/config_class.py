@@ -5,6 +5,7 @@ from appium import webdriver as appiumdriver
 from appium.options.android.uiautomator2.base import UiAutomator2Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class ConfigInitClass(object):
@@ -17,10 +18,10 @@ class ConfigInitClass(object):
         for argument in add_args_lst:
             self.options.add_argument(argument)
 
-    def webdriver(self):
+    def webdriver(self, explicit_wait=10):
         # Instanciate webdriver
         self.driver = webdriver.Chrome(options=self.options, service=ChromeService(ChromeDriverManager().install()))
-    
+
     def appiumdriver(self):
         options = UiAutomator2Options()
         # Instanciate appiumdriver

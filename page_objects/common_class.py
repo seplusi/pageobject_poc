@@ -1,20 +1,22 @@
 import time
-from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class commonClass(object):
-    def __init__(self, driver, config, page_obj_class_name) -> None:
+    def __init__(self, driver, config, page_obj_class_name, explicit_wait=10) -> None:
         self.driver = driver
         self.config = config
-        # Load page specific locators 
-        self.config.read(f'resources/locator/{page_obj_class_name}.ini')
+        self.wait_driver = WebDriverWait(self.driver, explicit_wait)
+        # Load page specific locators
+        subfolder = 'mobile/' if 'mobile' in page_obj_class_name.lower() else ''
+        self.config.read(f'resources/locator/{subfolder}{page_obj_class_name}.ini')
         self.locators = self._get_all_locators(page_obj_class_name)
 
     def _get_all_locators(self, section_name):
         locators = {}
         for key in self.config[section_name]:
             type, selector = self.config[section_name][key].split(', ')
-            locators[key.upper()] = (eval(f'By.{type}'), selector)
+            locators[key.upper()] = (type, selector)
         
         return locators
     

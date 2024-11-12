@@ -1,0 +1,86 @@
+driver.contexts
+['NATIVE_APP', 'WEBVIEW_chrome']
+
+driver.contexts
+'NATIVE_APP'
+
+
+
+
+driver.switch_to.context('NATIVE_APP')
+driver.switch_to.context('WEBVIEW_chrome')
+
+
+
+
+
+##################################################################
+# Working with WebView context in Android mobile automation test #
+##################################################################
+Qxf2 had created an Android mobile app recently to help testers practice mobile test automation. As a next step, we wanted to provide a sample mobile test that comes out of the box with our framework. We worked on automating a scenario – click on options in the mobile app one after another and validate the URL opened in the browser in a WebView. We hit a few road blocks while automating our way through the WebView. When we tried to find resources on the internet to solve it we realised there were only a few Stack Overflow/Appium discussion around the individual hurdle but a whole post on how to go about automating it. With this post I wish to fill this void and hope to help testers out there who may hit the same issues.
+
+####################################
+# Primer about context and WebView #
+####################################
+Context is the context of the present state of the application. It provides access to resources in your current environment. An Android app abstracts multiple components into contexts. For example – when you enter a restaurant, you generally check with the receptionists about tables, you only order food when you are at the table, there are two contexts here – reception & table, to access a resource in a context you need to be inside it.
+WebView is a light weight component that lets you display web pages as part of your android application but it does not include the features of a fully developed web browser.
+
+
+###########################################
+# How to go about testing WebView context #
+###########################################
+The scenario we tried to automate is click on Menu options and validate the URL it redirects to on Chrome in WebView.
+There are two contexts in play here – ['NATIVE_APP', 'WEBVIEW_chrome'].
+Note: driver.contexts displayes the contexts available.
+The Menu options are part of the NATIVE_APP context and the webpage that open after clicking on the options is part of the WEBVIEW_chrome context. We need to switch to respective contexts to access components/elements in them.
+Before we start working on the automation test, the Appium server needs a ChromeDriver to control the Chrome WebView. We need to use the location of the appropriate ChromeDriver binary corresponding to the Chrome version on the Android device. But we used --allow-insecure chromedriver_autodownload CLI parameter that the Appium server supports, this parameter auto magically downloads and uses the required ChromeDriver. Full command – appium server --allow-insecure chromedriver_autodownload.
+Now, automating this scenario involves 3 iterative steps:
+1. Clicking on a Menu option in NATIVE_APP context
+2. Validating the URL in WEBVIEW_chrome context
+3. Navigate back to the app
+
+Note: The code snippets here are to help you follow along. They do not conform to Qxf2’s normal standards of writing code.
+
+  ##############################################
+  # 1. Clicking on a Menu option in NATIVE_APP #
+  ##############################################
+  We start by clicking on a Menu option in the app.
+  
+  To interact with the components in the app we need to switch to NATIVE_APP but since it is the default context switching to this context initially is not necessary. Check the current context using driver.current_context and click on the Menu and Developed by options.
+
+if driver.current_context == "NATIVE_APP":
+    menu_button = driver.find_element(by=By.XPATH,
+                                      value="//android.widget.ImageView[@content-desc='More options']")
+    menu_button.click()
+ 
+    # Click on Developed by Qxf2 Services option
+    developed_by_xpath = "//android.widget.TextView[@text='Developed by Qxf2 Services']"
+    WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, developed_by_xpath)))
+    developed_by_option = driver.find_element(By.XPATH, developed_by_xpath)
+    developed_by_option.click()
+
+  When we use an emulator for the first time, Chrome will display a welcome screen and prompt to turn on sync. We tried setting capabilities: --disable-fre --no-default-browser-check --no-first-run chrome options but this did not help. We had to add a hacky snippet to check if the Welcome screen appears and click on respective options.
+This welcome screen is part of the NATIVE_APP context, clicking on the options takes us to the WEBVIEW_chrome context.
+
+    try:
+        time.sleep(2) # The welcome screen prompts appear on the screen slowly unfortunately
+        accept_button_locator = "//android.widget.Button[@resource-id='com.android.chrome:id/signin_fre_dismiss_button']"
+        accept_button_element = driver.find_element(By.XPATH, accept_button_locator)
+        accept_button_element.click()
+        print("Clicked on Chrome Welcome Dismiss button")
+        time.sleep(3) # Wait longer, probability of having to turn off sync are high
+    except:
+        print("Chrome Welcome Dismiss button not present, ignoring click")
+        time.sleep(1) # Wait less, turn off sync might already have been clicked
+    try:
+        turn_off_sync_button_locator = "//android.widget.Button[@resource-id='com.android.chrome:id/negative_button']"
+        turn_off_sync_button_element = driver.find_element(By.XPATH, turn_off_sync_button_locator)
+        turn_off_sync_button_element.click()
+        print("Clicked on Turn off sync")
+        time.sleep(1)
+    except:
+        print("Turn off sync not present, ignoring click")
+
+  Note: We have added time.sleep(seconds) step in the snippet to help slow down the UI interaction, it is useful for UI debugging. A mundane wait/sleep step should never be used in production code.
+
+

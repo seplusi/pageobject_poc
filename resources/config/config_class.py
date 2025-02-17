@@ -22,10 +22,13 @@ class ConfigInitClass(object):
         # Instanciate webdriver
         self.driver = webdriver.Chrome(options=self.options, service=ChromeService(ChromeDriverManager().install()))
 
-    def appiumdriver(self):
+    def appiumdriver(self, extra_caps=None):
         options = UiAutomator2Options()
         # Instanciate appiumdriver
-        appium_capabilities = json.loads(self.config.get('appiumdriver', 'capabilities'))
+        appium_capabilities = json.loads(self.config.get('appiumdriver', 'default_capabilities'))
+        if extra_caps:
+            extra_appium_caps = json.loads(self.config.get('appiumdriver', f'{extra_caps}_capabilities'))
+            appium_capabilities.update(extra_appium_caps)
         options.load_capabilities(appium_capabilities)
         appium_server_url = self.config.get('appiumdriver', 'appium_server_url')
         self.appiumdriver = appiumdriver.Remote(appium_server_url, options=options)

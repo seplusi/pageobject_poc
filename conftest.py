@@ -18,10 +18,17 @@ def webdriver_create(init_config_object):
 def config_fixture(init_config_object):
     return init_config_object.config
 
-@pytest.fixture(scope="function", name="appiumdriver")
+@pytest.fixture(scope="function", name="chrome_appiumriver")
 def appiumdriver_create(init_config_object):
-    init_config_object.appiumdriver()
+    init_config_object.appiumdriver('chrome')
     yield init_config_object.appiumdriver
 
     init_config_object.appiumdriver.quit()
-    
+
+
+@pytest.fixture(scope="function", name="calc_appiumdriver")
+def appiumdriver_create2(init_config_object):
+    init_config_object.appiumdriver('calculator2')
+    yield init_config_object.appiumdriver
+
+    init_config_object.appiumdriver.quit()

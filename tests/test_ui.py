@@ -20,7 +20,11 @@ def test_convert_real2euros(webdriver, config):
     home_page.conversion_result(100, 'Euros')
 
 def test_webview_mobile_home_page(config, chrome_appiumriver):
-    mobileConvertHomePage(chrome_appiumriver, config, URL)
+    home_page = mobileConvertHomePage(chrome_appiumriver, config, URL)
+
+    home_page.insert_amount(100)
+    #home_page.select_src_x('real')
+
 
 def test_native_app_calc(config, calc_appiumdriver):
     mobileCalcAppPage(calc_appiumdriver, config, explicit_wait=5)

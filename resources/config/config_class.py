@@ -6,6 +6,7 @@ from appium.options.android.uiautomator2.base import UiAutomator2Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
+import time
 
 
 class ConfigInitClass(object):
@@ -32,3 +33,10 @@ class ConfigInitClass(object):
         options.load_capabilities(appium_capabilities)
         appium_server_url = self.config.get('appiumdriver', 'appium_server_url')
         self.appiumdriver = appiumdriver.Remote(appium_server_url, options=options)
+
+    def switch_2_context(self, context_name):
+        for _ in range(10):
+            if context_name in self.appiumdriver.contexts:
+                break
+            time.sleep(1)
+        self.appiumdriver.switch_to.context(context_name)

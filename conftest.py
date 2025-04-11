@@ -21,6 +21,7 @@ def config_fixture(init_config_object):
 @pytest.fixture(scope="function", name="chrome_appiumriver")
 def appiumdriver_create(init_config_object):
     init_config_object.appiumdriver('chrome')
+    init_config_object.switch_2_context('WEBVIEW_chrome')
     yield init_config_object.appiumdriver
 
     init_config_object.appiumdriver.quit()

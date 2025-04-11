@@ -20,6 +20,7 @@ class convertHomePage(commonClass):
         self.amount = 0
 
     def insert_amount(self, amount):
+        self.insert_amount_box.send_keys(Keys.BACKSPACE)
         self.insert_amount_box.send_keys(amount)
         self.amount = amount
 

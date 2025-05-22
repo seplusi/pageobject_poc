@@ -1,6 +1,6 @@
 Start appium cli:
 appium --base-path /wd/hub
-ppium --base-path /wd/hub --allow-insecure chromedriver_autodownload
+appium --base-path /wd/hub --allow-insecure chromedriver_autodownload
 
 driver.contexts
 ['NATIVE_APP', 'WEBVIEW_chrome']

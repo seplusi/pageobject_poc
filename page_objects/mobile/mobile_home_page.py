@@ -43,6 +43,7 @@ class mobileConvertHomePage(commonClass):
     def insert_amount(self, amount):
         self.insert_amount_box.send_keys(Keys.BACKSPACE)
         self.insert_amount_box.send_keys(amount)
+        self.driver.hide_keyboard()
         self.amount = amount
 
     def select_src_x(self, currency_name):

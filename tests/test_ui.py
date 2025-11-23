@@ -9,10 +9,10 @@ URL = 'https://www.xe.com/'
 
 
 def test_home_page(webdriver, config):
-    convertHomePage(webdriver, config, URL, accept_cookies=True)
+    convertHomePage(webdriver, config, URL, accept_cookies=False)
 
 def test_convert_real2euros(webdriver, config):
-    home_page = convertHomePage(webdriver, config, URL, accept_cookies=True)
+    home_page = convertHomePage(webdriver, config, URL, accept_cookies=False)
     home_page.insert_amount(100)
     home_page.select_src_x('real')
     home_page.select_dst_x('euro')
@@ -44,15 +44,15 @@ def test_native_app_calc(config, calc_appiumdriver):
     home_page = mobileCalcAppPage(calc_appiumdriver, config, explicit_wait=5)
     
     home_page.num1.click()
-    assert home_page.result_typed.text == '1'
+    assert home_page.result_typed.text == 'Calculator input field 1'
     assert home_page.result_tab.text == ''
 
     home_page.plus_btn.click()
-    assert home_page.result_typed.text == '1 Plus '
+    assert home_page.result_typed.text == 'Calculator input field 1 Plus '
     assert home_page.result_tab.text == ''
 
     home_page.num2.click()
-    assert home_page.result_typed.text == '1 Plus 2'
+    assert home_page.result_typed.text == 'Calculator input field 1 Plus 2'
     assert home_page.result_tab.text == '3'
 
     home_page.equal_btn.click()

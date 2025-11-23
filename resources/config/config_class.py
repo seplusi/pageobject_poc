@@ -6,6 +6,8 @@ from appium.options.android.uiautomator2.base import UiAutomator2Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
+from page_objects.mobile.choose_chrome_accounts import mobileSelectChromeAccPage
+from page_objects.mobile.mobile_select_privacy import mobileSelectPrivacyPage
 import time
 
 
@@ -40,3 +42,9 @@ class ConfigInitClass(object):
                 break
             time.sleep(1)
         self.appiumdriver.switch_to.context(context_name)
+    
+    def use_without_acc(self):
+        mobileSelectChromeAccPage(self.appiumdriver, self.config).use_without_acc()
+
+    def accept_privacy(self):
+        mobileSelectPrivacyPage(self.appiumdriver, self.config).accept_default_privacy()

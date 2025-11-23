@@ -8,7 +8,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 
 class mobileConvertHomePage(commonClass):
-    def __init__(self, driver, config, url, explicit_wait=20) -> None:
+    def __init__(self, driver, config, url, explicit_wait=20, cookie=False) -> None:
         super().__init__(driver, config, __class__.__name__, explicit_wait)
         self.driver.get(url)
 
@@ -21,7 +21,8 @@ class mobileConvertHomePage(commonClass):
         assert self.wait_driver.until(EC.visibility_of_element_located(self.locators['AMOUNT_TXT'])).text == 'Amount'
         self.insert_amount_box = self.wait_driver.until(EC.visibility_of_element_located(self.locators['AMOUNT']))
         # Accept cookie
-        self.wait_driver.until(EC.visibility_of_element_located(self.locators['ACCEPT_COOKIE'])).click()
+        if cookie:
+            self.wait_driver.until(EC.visibility_of_element_located(self.locators['ACCEPT_COOKIE'])).click()
 
     @property
     def selected_source_currency(self):

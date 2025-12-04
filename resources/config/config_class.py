@@ -3,6 +3,7 @@ from configparser import ConfigParser
 from selenium import webdriver
 from appium import webdriver as appiumdriver
 from appium.options.android.uiautomator2.base import UiAutomator2Options
+from appium.options.ios.xcuitest.base import XCUITestOptions
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
@@ -33,7 +34,14 @@ class ConfigInitClass(object):
             extra_appium_caps = json.loads(self.config.get('appiumdriver', f'{extra_caps}_capabilities'))
             appium_capabilities.update(extra_appium_caps)
         options.load_capabilities(appium_capabilities)
-        appium_server_url = self.config.get('appiumdriver', 'appium_server_url')
+        appium_server_url = self.config.get('appiumserver', 'appium_server_url')
+        self.appiumdriver = appiumdriver.Remote(appium_server_url, options=options)
+
+    def appiumiosdriver(self):
+        options = XCUITestOptions()
+        appium_capabilities = json.loads(self.config.get('appiumiosdriver', 'default_capabilities'))
+        options.load_capabilities(appium_capabilities)
+        appium_server_url = self.config.get('appiumserver', 'appium_server_url')
         self.appiumdriver = appiumdriver.Remote(appium_server_url, options=options)
 
     def switch_2_context(self, context_name):
